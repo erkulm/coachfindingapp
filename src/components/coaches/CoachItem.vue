@@ -6,7 +6,7 @@
             <base-badge :type="area" :title="area" v-for="area in areas" :key="area">{{ area }}</base-badge>
         </div>
         <div class="actions">
-            <base-button mode="outline" link :to="coachContactLink">Contact</base-button>
+            <base-button link mode="outline"  :to="coachContactLink">Contact</base-button>
             <base-button link :to="coachDetailsLink">View Details</base-button>
         </div>
     </li>
@@ -19,7 +19,7 @@ export default {
     props: ['id', 'firstName', 'lastName', 'rate', 'areas'],
     computed: {
         coachDetailsLink() {
-            return '/coaches/' + this.id;
+            return this.$route.path + '/' + this.id;
         },
         coachContactLink() {
             return this.coachDetailsLink + '/contact';
