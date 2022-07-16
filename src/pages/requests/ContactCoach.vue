@@ -1,10 +1,15 @@
 <template>
     <form @submit.prevent="submitForm">
+        <base-dialog :show="!!error" title="An Error Occured" @close="handleError">
+            <p>{{ error }}</p>
+        </base-dialog>
+        <div v-if="isLoading">
+            <base-spinner></base-spinner>
+        </div>
         <div>
             <label for="email">Your Email</label>
             <input type="email" id="email" v-model.trim="email" />
         </div>
-
         <div>
             <label for="message">Message</label>
             <textarea rows="5" id="message" v-model.trim="message"></textarea>
@@ -17,31 +22,45 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return {
             email: '',
             message: '',
-            formIsValid: true
+            formIsValid: true,
+            error: null,
+            isLoading : false
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
+            this.error = null;
             this.formIsValid = true;
-            if (this.email === '' || !this.email.includes('@') || this.message === ''){
+            if (this.email === '' || !this.email.includes('@') || this.message === '') {
                 this.formIsValid = false;
                 return;
             }
-            this.$store.dispatch('requests/contactCoach', {
-                email:this.email,
-                message:this.message,
-                coachId: this.$route.params.id
-            });
+            try {
+                this.isLoading = true
+                await this.$store.dispatch('requests/contactCoach', {
+                    email: this.email,
+                    message: this.message,
+                    coachId: this.$route.params.id
+                });
+            } catch (error) {
+                this.isLoading = false;
+                this.error = error || 'An Error occured';
+            }
+            this.isLoading = false;
             this.$router.replace('/coaches');
         }
     }
 }
 </script>
+}catch(){
+
+}
 
 <style scoped>
 form {
