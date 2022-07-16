@@ -73,7 +73,7 @@ export default {
                 this.isFormValid = false;
                 this.isDescValid = false;
             }
-            if (this.rate || this.rate <= 0) {
+            if (!this.rate || this.rate <= 0) {
                 this.isFormValid = false;
                 this.isRateValid = false;
             }

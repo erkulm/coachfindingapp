@@ -7,8 +7,5 @@ export default{
     },
     isCoach(state){
         return state.isCoach;
-    },
-    currentUserId(state){
-        return state.currentUserId;
     }
 }

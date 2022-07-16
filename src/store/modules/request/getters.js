@@ -3,9 +3,9 @@ export default {
         const coachId = rootGetters.currentUserId;
         return state.requests.filter((r) => {
             if(r.coachId === coachId){
-                return false;
+                return true;
             }
-            return true;
+            return false;
         });
     },
     hasRequests(state, getters) {
