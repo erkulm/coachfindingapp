@@ -1,18 +1,20 @@
 <template>
-    <base-dialog :show="!!error" title="Error" @close="handleError">{{ error }}</base-dialog>
-    <section>
-        <base-card>
-            <h2>
-                Request Received
-            </h2>
-            <base-spinner v-if="isLoading"></base-spinner>
-            <ul v-else-if="hasRequests">
-                <requests-item v-for="request in receivedRequests" :key="request.id" :email="request.userEmail"
-                    :message="request.message"></requests-item>
-            </ul>
-            <h3 v-else>You have not received any requests yet</h3>
-        </base-card>
-    </section>
+    <div>
+        <base-dialog :show="!!error" title="Error" @close="handleError">{{ error }}</base-dialog>
+        <section>
+            <base-card>
+                <h2>
+                    Request Received
+                </h2>
+                <base-spinner v-if="isLoading"></base-spinner>
+                <ul v-else-if="hasRequests">
+                    <requests-item v-for="request in receivedRequests" :key="request.id" :email="request.userEmail"
+                        :message="request.message"></requests-item>
+                </ul>
+                <h3 v-else>You have not received any requests yet</h3>
+            </base-card>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -49,11 +51,11 @@ export default {
             }
             this.isLoading = false;
         },
-        handleError(){
+        handleError() {
             this.error = null;
         }
     },
-    created(){
+    created() {
         this.loadRequests();
     }
 }
