@@ -4,6 +4,13 @@ export default {
     },
     async signup(context, payload) {
         await authenticate(payload, context, 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAb2tXg5mExNDeWIFu7HEuijzsWSBQIntQ');
+    },
+    logout(context) {
+        context.commit('setUser', {
+            token: null,
+            userId: null,
+            tokenExpiration: null
+        });
     }
 }
 

@@ -1,8 +1,11 @@
-export default{
-    currentUserId(state){
+export default {
+    currentUserId(state) {
         return state.currentUserId;
     },
-    token(state){
+    token(state) {
         return state.token;
+    },
+    isAuthenticated(state) {
+        return !!state.token;
     }
 }
