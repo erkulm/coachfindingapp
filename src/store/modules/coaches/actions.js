@@ -18,7 +18,7 @@ export default {
         });
 
         if(!response.ok){
-            //error hangling
+            //error handling
         }
 
         context.commit('registerCoach', {
