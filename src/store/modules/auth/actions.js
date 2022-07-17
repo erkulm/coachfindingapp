@@ -25,7 +25,7 @@ async function authenticate(payload, context, url) {
     const responseData = await response.json();
 
     context.commit('setUser', {
-        token: responseData.token,
+        token: responseData.idToken,
         userId: responseData.localId,
         tokenExpiration: responseData.expiresIn
     });
