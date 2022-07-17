@@ -1,21 +1,98 @@
 <template>
-    <section>
-        <base-card>
-            <form>
-                <div class="form-control">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" />
-                </div>
-                <div class="form-control">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" />
-                </div>
-                <base-button>Login</base-button>
-                <base-button type="button" mode="flat">Sign up instead</base-button>
-            </form>
-        </base-card>
-    </section>
+    <div>
+        <base-dialog :show="!!error" title="An error occured" @close="handleError">
+            <p>{{error}}</p>
+        </base-dialog>
+        <base-dialog :show="isLoading" title="Authentication" fixed>
+            <p>Authenticating</p>
+        </base-dialog>
+        <section>
+            <base-card>
+                <form @submit.prevent="submitForm">
+                    <div class="form-control">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" v-model.trim="email" />
+                    </div>
+                    <div class="form-control">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" v-model.trim="password" />
+                    </div>
+                    <p v-if="!formIsValid">Please enter a valid email and a password which must be 6 characters minumum.
+                    </p>
+                    <base-button>{{ submitButtonCaption }}</base-button>
+                    <base-button type="button" mode="flat" @click="switchAuthMode">{{ switchModeButtonCaaption }}
+                    </base-button>
+                </form>
+            </base-card>
+        </section>
+    </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            email: '',
+            password: '',
+            formIsValid: true,
+            mode: 'login',
+            isLoading: false,
+            error: null,
+        };
+    },
+    computed: {
+        submitButtonCaption() {
+            if (this.mode === 'login') {
+                return "Login";
+            } else {
+                return 'Signup';
+            }
+        },
+        switchModeButtonCaaption() {
+            if (this.mode === 'login') {
+                return 'Signup instead';
+            } else {
+                return 'Login instead';
+            }
+        }
+    },
+    methods: {
+        async submitForm() {
+            this.isLoading = true;
+            this.formIsValid = true;
+            if (this.email === '' || !this.email.includes('@'), this.password.length < 6) {
+                this.formIsValid = false;
+                return;
+            }
+
+            try {
+                if (this.mode === 'login') {
+                    console.log(this.mode);
+                } else {
+                    await this.$store.dispatch('signup', {
+                        email: this.email,
+                        password: this.password
+                    });
+                }
+            } catch (error) {
+                this.error = error.message || 'Failed to authenticate!';
+            }
+
+            this.isLoading = false;
+        },
+        switchAuthMode() {
+            if (this.mode === 'login') {
+                this.mode = 'signup';
+            } else {
+                this.mode = 'login';
+            }
+        },
+        handleError(){
+            this.error = null;
+        }
+    }
+}
+</script>
 
 <style scoped>
 .form-control {
