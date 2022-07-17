@@ -1,10 +1,10 @@
 <template>
     <div>
         <base-dialog :show="!!error" title="An error occured" @close="handleError">
-            <p>{{error}}</p>
+            <p>{{ error }}</p>
         </base-dialog>
         <base-dialog :show="isLoading" title="Authentication" fixed>
-            <p>Authenticating</p>
+            <base-spinner></base-spinner>
         </base-dialog>
         <section>
             <base-card>
@@ -65,14 +65,16 @@ export default {
                 return;
             }
 
+            const authPayload = {
+                email: this.email,
+                password: this.password
+            };
+
             try {
                 if (this.mode === 'login') {
-                    console.log(this.mode);
+                    await this.$store.dispatch('login', authPayload);
                 } else {
-                    await this.$store.dispatch('signup', {
-                        email: this.email,
-                        password: this.password
-                    });
+                    await this.$store.dispatch('signup', authPayload);
                 }
             } catch (error) {
                 this.error = error.message || 'Failed to authenticate!';
@@ -87,7 +89,7 @@ export default {
                 this.mode = 'login';
             }
         },
-        handleError(){
+        handleError() {
             this.error = null;
         }
     }
